@@ -1,0 +1,7 @@
+{
+  "name": "Huayu - Chinese Dialect Translator",
+  "description": "A sophisticated translator for various Chinese dialects including Cantonese, Shanghainese, Hokkien, and more, featuring phonetic guides and high-quality voice synthesis.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
