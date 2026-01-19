@@ -1,20 +1,46 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+<img width="600" height="1250" alt="GHBanner" src="https://github.com/Vannifaye/VF-Huaxiazi-HuayuFangYan-translator/blob/main/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-01-20%20004722.png" />
 </div>
+# 话匣子 (Huaxiazi) - 中华方言 AI 翻译官 🏮
 
-# Run and deploy your AI Studio app
+**话匣子 (Huayu - Chinese Dialect Translator)** 是一款专注于大中华方言保护与沟通的智能翻译应用。它不仅提供精准的文字翻译，还融合了极具美学的“中国红”视觉设计、地道的语音合成以及深度的人文图鉴。
 
-This contains everything you need to run your app locally.
+## ✨ 功能特性
 
-View your app in AI Studio: https://ai.studio/apps/drive/1KcOlTXliWbYqFDFC32g-_2ewsI1i2Fc5
+- **多方言支持**：覆盖粤语、吴语、闽南语、西南官话、东北话、客家话等十余种主流方言及细分语种。
+- **双向翻译**：支持普通话与方言之间的深度互译，并提供详尽的拼音标注（如粤拼、吴拼等）。
+- **乡音合成 (TTS)**：利用 Gemini 2.5 Flash TTS 技术，实时生成地道的方言读音，不仅是看，更是听。
+- **方言图鉴**：交互式探索中华方言地图，了解不同地区的语言特征、历史渊源及经典词汇。
+- **拾遗录 (历史)**：自动保存您的翻译足迹，随时回顾那些触动心弦的乡音。
+- **大中华美学 UI**：深邃的红色主题配合精致的小比例文字设计，营造出高端且具有文化底蕴的交互体验。
 
-## Run Locally
+## 🛠️ 技术栈
 
-**Prerequisites:**  Node.js
+- **Frontend**: React 19 + TypeScript
+- **Styling**: Tailwind CSS
+- **AI Core**: Google Gemini API (@google/genai)
+  - **Gemini 3 Flash**: 负责复杂的方言逻辑理解与 JSON 结构化翻译。
+  - **Gemini 2.5 Flash TTS**: 负责高质量的端到端方言语音合成。
+- **Web APIs**: 
+  - Web Speech API (用于方言语音录入识别)
+  - Web Audio API (用于原生 PCM 字节流解码与播放)
 
+## 🚀 快速开始
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. **获取 API Key**：本应用需要有效的 Google Gemini API Key。
+2. **环境配置**：确保您的执行环境已配置 `process.env.API_KEY`。
+3. **运行**：
+   - 应用基于 ES Modules 构建，直接通过 `index.html` 载入。
+   - 确保浏览器已授予麦克风权限以使用语音录入功能。
+
+## 📁 项目结构
+
+- `App.tsx`: 应用主逻辑与各功能 Tab 渲染。
+- `services/geminiService.ts`: 封装了基于 Gemini 的方言翻译与语音生成逻辑。
+- `utils/audioUtils.ts`: 处理 Base64 PCM 数据解码及 Web Audio 播放逻辑。
+- `types.ts`: 定义了方言枚举、用户信息及翻译结果的严谨数据结构。
+- `metadata.json`: 定义了应用权限请求。
+
+## 📖 文化愿景
+
+“话匣子”不仅是一个工具，更是一个文化的载体。在城市化进程中，乡音往往被遗忘。我们希望通过 AI 的力量，让每一个漂泊在外的游子都能听见家乡的声音，让每一份古老的方言都能在数字时代焕发生机。
