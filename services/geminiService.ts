@@ -10,20 +10,22 @@ export const translateText = async (
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   const systemInstruction = mode === TranslationMode.TO_DIALECT 
-    ? `你是一位精通中国方言的语言学专家。请将用户输入的普通话或英文翻译成指定的方言：${dialect}。`
-    : `你是一位精通中国方言的语言学专家。请将用户输入的方言（${dialect}）翻译成标准普通话。`;
+    ? `你是一位精通中国方言的顶级语言学专家。请将用户输入的普通话翻译成精准的方言：${dialect}。
+       注意区分细微差别（例如：成都话较温婉，自贡话有独特的尾音和卷舌，重庆话较硬朗）。
+       必须返回方言最地道的口语写法，而非简单的字面替换。`
+    : `你是一位精通中国方言的顶级语言学专家。请将输入的方言（${dialect}）翻译成标准普通话。`;
 
   const prompt = mode === TranslationMode.TO_DIALECT
     ? `翻译文本: "${text}"。
        要求返回：
-       1. 方言文字表达。
-       2. 该方言的拼音或注音（如粤语使用粤拼，上海话使用吴语拼音）。
-       3. 意思的详细解释。`
+       1. 地道的${dialect}文字表达。
+       2. 该方言最常用的拼音标注（如粤语用粤拼，川渝话用四川方言拼音，包含音调）。
+       3. 针对${dialect}特点的文化解释。`
     : `翻译文本: "${text}"。
        要求返回：
        1. 翻译后的标准普通话。
-       2. 原方言文本的读音标注（拼音）。
-       3. 对方言词汇的文化解释或意义。`;
+       2. 原方言文本的音调标注。
+       3. 对方言特定词汇的解析。`;
 
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
@@ -34,10 +36,10 @@ export const translateText = async (
       responseSchema: {
         type: Type.OBJECT,
         properties: {
-          translatedText: { type: Type.STRING, description: "翻译结果文本" },
-          phonetic: { type: Type.STRING, description: "拼音/注音标注" },
-          meaning: { type: Type.STRING, description: "含义/文化解释" },
-          dialectName: { type: Type.STRING, description: "方言名称" }
+          translatedText: { type: Type.STRING, description: "翻译后的方言结果" },
+          phonetic: { type: Type.STRING, description: "对应的方言拼音标注" },
+          meaning: { type: Type.STRING, description: "详细的语境与文化解释" },
+          dialectName: { type: Type.STRING, description: "当前方言名称" }
         },
         required: ["translatedText", "phonetic", "meaning", "dialectName"]
       }
@@ -51,8 +53,9 @@ export const translateText = async (
 export const generateSpeech = async (text: string, dialect: Dialect): Promise<string> => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
-  // 简化 Prompt，确保 TTS 模型更稳定地识别意图
-  const prompt = `Read the following Chinese dialect text in a clear, authentic tone: ${text}`;
+  // 改进提示词，引导模型模仿特定方言的语调和节奏
+  const prompt = `Please read this Chinese text using the very authentic accent and unique prosody of the "${dialect}" region. 
+  Emphasize the local tonal character and emotional flair of the region: "${text}"`;
   
   try {
     const response = await ai.models.generateContent({
@@ -62,7 +65,7 @@ export const generateSpeech = async (text: string, dialect: Dialect): Promise<st
         responseModalities: [Modality.AUDIO],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Kore' }, 
+            prebuiltVoiceConfig: { voiceName: 'Kore' }, // 使用通用的声线，但通过 Prompt 引导语调
           },
         },
       },
@@ -72,12 +75,11 @@ export const generateSpeech = async (text: string, dialect: Dialect): Promise<st
     const base64Audio = part?.inlineData?.data;
 
     if (!base64Audio) {
-      console.warn("Gemini TTS response structure:", JSON.stringify(response, null, 2));
-      throw new Error("模型未返回有效的语音数据");
+      throw new Error("语音流返回为空");
     }
     return base64Audio;
   } catch (error) {
-    console.error("Speech generation error:", error);
+    console.error("Gemini TTS Error:", error);
     throw new Error(`语音生成失败: ${error instanceof Error ? error.message : '未知错误'}`);
   }
 };

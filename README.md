@@ -1,6 +1,3 @@
-<div align="center">
-<img width="600" height="1250" alt="GHBanner" src="https://github.com/Vannifaye/VF-Huaxiazi-HuayuFangYan-translator/blob/main/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-01-20%20004722.png" />
-</div>
 # 话匣子 (Huaxiazi) - 中华方言 AI 翻译官 🏮
 
 **话匣子 (Huayu - Chinese Dialect Translator)** 是一款专注于大中华方言保护与沟通的智能翻译应用。它不仅提供精准的文字翻译，还融合了极具美学的“中国红”视觉设计、地道的语音合成以及深度的人文图鉴。
